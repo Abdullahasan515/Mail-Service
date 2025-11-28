@@ -1,4 +1,4 @@
-const API_BASE = 'https://mail-server-ts6e.onrender.com';
+const API_BASE = 'https://mail-server-ts6e.onrender.com/api';
 
 let currentUser = null;
 let currentView = 'login-view';
