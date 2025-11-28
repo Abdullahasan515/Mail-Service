@@ -25,7 +25,6 @@ body {
   background-color: #020617;
 }
 
-/* العلم في يسار الشاشة فقط */
 .flag-bg {
   position: fixed;
   top: 0;
@@ -207,7 +206,6 @@ body {
   box-shadow: var(--shadow-soft);
 }
 
-/* محاذاة البطاقة إلى اليمين */
 .auth-card {
   max-width: 520px;
   margin-top: 32px;
@@ -550,3 +548,4 @@ textarea {
     display: none;
   }
 }
+
