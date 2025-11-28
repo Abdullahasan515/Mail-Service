@@ -1,4 +1,4 @@
-const API_BASE = 'https://mail-server-ts6e.onrender.com/api';
+const API_BASE = 'https://mail-server-ts6e.onrender.com';
 
 let currentUser = null;
 let currentView = 'login-view';
@@ -10,12 +10,7 @@ const loginView = document.getElementById('login-view');
 const inboxView = document.getElementById('inbox-view');
 const sentView = document.getElementById('sent-view');
 const composeView = document.getElementById('compose-view');
-const views = {
-  'login-view': loginView,
-  'inbox-view': inboxView,
-  'sent-view': sentView,
-  'compose-view': composeView
-};
+const views = { 'login-view': loginView, 'inbox-view': inboxView, 'sent-view': sentView, 'compose-view': composeView };
 
 const navButtons = document.querySelectorAll('.nav-btn');
 const toast = document.getElementById('toast');
@@ -43,7 +38,6 @@ const modalClose = document.getElementById('modal-close');
 const modalDelete = document.getElementById('modal-delete');
 
 function showToast(message) {
-  if (!toast) return;
   toast.textContent = message;
   toast.classList.remove('hidden');
   setTimeout(() => {
@@ -52,7 +46,7 @@ function showToast(message) {
 }
 
 function switchView(viewId) {
-  Object.values(views).forEach(v => v && v.classList.add('hidden'));
+  Object.values(views).forEach(v => v.classList.add('hidden'));
   const view = views[viewId];
   if (view) {
     view.classList.remove('hidden');
@@ -64,27 +58,18 @@ function switchView(viewId) {
 }
 
 function setLoggedInState(isLoggedIn) {
-  if (!userInfo) return;
   if (isLoggedIn) {
     userInfo.style.display = 'flex';
-    const navLogin = document.getElementById('nav-login');
-    const navInbox = document.getElementById('nav-inbox');
-    const navSent = document.getElementById('nav-sent');
-    const navCompose = document.getElementById('nav-compose');
-    if (navLogin) navLogin.style.display = 'none';
-    if (navInbox) navInbox.style.display = 'block';
-    if (navSent) navSent.style.display = 'block';
-    if (navCompose) navCompose.style.display = 'block';
+    document.getElementById('nav-login').style.display = 'none';
+    document.getElementById('nav-inbox').style.display = 'block';
+    document.getElementById('nav-sent').style.display = 'block';
+    document.getElementById('nav-compose').style.display = 'block';
   } else {
     userInfo.style.display = 'none';
-    const navLogin = document.getElementById('nav-login');
-    const navInbox = document.getElementById('nav-inbox');
-    const navSent = document.getElementById('nav-sent');
-    const navCompose = document.getElementById('nav-compose');
-    if (navLogin) navLogin.style.display = 'block';
-    if (navInbox) navInbox.style.display = 'none';
-    if (navSent) navSent.style.display = 'none';
-    if (navCompose) navCompose.style.display = 'none';
+    document.getElementById('nav-login').style.display = 'block';
+    document.getElementById('nav-inbox').style.display = 'none';
+    document.getElementById('nav-sent').style.display = 'none';
+    document.getElementById('nav-compose').style.display = 'none';
   }
 }
 
@@ -113,136 +98,109 @@ tabs.forEach(tab => {
     tab.classList.add('active');
     const tabId = tab.dataset.tab;
     tabContents.forEach(c => c.classList.remove('active'));
-    const activeContent = document.getElementById(tabId);
-    if (activeContent) {
-      activeContent.classList.add('active');
-    }
+    document.getElementById(tabId).classList.add('active');
   });
 });
 
-if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const emailInput = document.getElementById('login-email');
-    const passwordInput = document.getElementById('login-password');
-    const email = emailInput ? emailInput.value.trim() : '';
-    const password = passwordInput ? passwordInput.value.trim() : '';
-    try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        showToast(data.message || 'فشل تسجيل الدخول.');
-        return;
-      }
-      const user = await res.json();
-      currentUser = user;
-      if (userEmailSpan) {
-        userEmailSpan.textContent = currentUser.email;
-      }
-      setLoggedInState(true);
-      showToast('تم تسجيل الدخول بنجاح ✅');
-      switchView('inbox-view');
-      loadInbox();
-    } catch (err) {
-      showToast('حدث خطأ في الاتصال بالخادم.');
-    }
-  });
-}
-
-if (registerForm) {
-  registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const nameInput = document.getElementById('register-name');
-    const emailInput = document.getElementById('register-email');
-    const passwordInput = document.getElementById('register-password');
-    const name = nameInput ? nameInput.value.trim() : '';
-    const email = emailInput ? emailInput.value.trim() : '';
-    const password = passwordInput ? passwordInput.value.trim() : '';
-    try {
-      const res = await fetch(`${API_BASE}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        showToast(data.message || 'فشل إنشاء الحساب.');
-        return;
-      }
-      showToast('تم إنشاء الحساب بنجاح ✅ يمكنك الآن تسجيل الدخول.');
-      tabs.forEach(t => t.classList.remove('active'));
-      const loginTabBtn = document.querySelector('[data-tab="login-tab"]');
-      if (loginTabBtn) {
-        loginTabBtn.classList.add('active');
-      }
-      tabContents.forEach(c => c.classList.remove('active'));
-      const loginTab = document.getElementById('login-tab');
-      if (loginTab) {
-        loginTab.classList.add('active');
-      }
-      const loginEmailInput = document.getElementById('login-email');
-      if (loginEmailInput && email) {
-        loginEmailInput.value = email;
-      }
-    } catch (err) {
-      showToast('حدث خطأ في الاتصال بالخادم.');
-    }
-  });
-}
-
-if (composeForm) {
-  composeForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!currentUser) {
-      showToast('الرجاء تسجيل الدخول أولاً.');
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      showToast(data.message || 'فشل تسجيل الدخول.');
       return;
     }
-    const toInput = document.getElementById('compose-to');
-    const subjectInput = document.getElementById('compose-subject');
-    const bodyInput = document.getElementById('compose-body');
-    const to = toInput ? toInput.value.trim() : '';
-    const subject = subjectInput ? subjectInput.value.trim() : '';
-    const body = bodyInput ? bodyInput.value.trim() : '';
-    try {
-      const res = await fetch(`${API_BASE}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          senderId: currentUser.id,
-          receiverEmail: to,
-          subject,
-          body
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        showToast(data.message || 'تعذر إرسال الرسالة.');
-        return;
-      }
-      showToast('تم إرسال الرسالة ✉️');
-      composeForm.reset();
-      switchView('sent-view');
-      loadSent();
-    } catch (err) {
-      showToast('حدث خطأ في الاتصال بالخادم.');
-    }
-  });
-}
+    const user = await res.json();
+    currentUser = user;
+    userEmailSpan.textContent = currentUser.email;
+    setLoggedInState(true);
+    showToast('تم تسجيل الدخول بنجاح ✅');
+    switchView('inbox-view');
+    loadInbox();
+  } catch (err) {
+    console.error(err);
+    showToast('حدث خطأ في الاتصال بالخادم.');
+  }
+});
 
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', () => {
-    currentUser = null;
-    currentMessages = [];
-    selectedMessageId = null;
-    setLoggedInState(false);
-    switchView('login-view');
-    showToast('تم تسجيل الخروج.');
-  });
-}
+registerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('register-name').value.trim();
+  const email = document.getElementById('register-email').value.trim();
+  const password = document.getElementById('register-password').value.trim();
+  try {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.message || 'فشل إنشاء الحساب.');
+      return;
+    }
+    showToast('تم إنشاء الحساب بنجاح ✅ يمكنك الآن تسجيل الدخول.');
+    tabs.forEach(t => t.classList.remove('active'));
+    document.querySelector('[data-tab="login-tab"]').classList.add('active');
+    tabContents.forEach(c => c.classList.remove('active'));
+    document.getElementById('login-tab').classList.add('active');
+    document.getElementById('login-email').value = email;
+  } catch (err) {
+    console.error(err);
+    showToast('حدث خطأ في الاتصال بالخادم.');
+  }
+});
+
+composeForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!currentUser) {
+    showToast('الرجاء تسجيل الدخول أولاً.');
+    return;
+  }
+  const to = document.getElementById('compose-to').value.trim();
+  const subject = document.getElementById('compose-subject').value.trim();
+  const body = document.getElementById('compose-body').value.trim();
+  try {
+    const res = await fetch(`${API_BASE}/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        senderId: currentUser.id,
+        receiverEmail: to,
+        subject,
+        body
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.message || 'تعذر إرسال الرسالة.');
+      return;
+    }
+    showToast('تم إرسال الرسالة ✉️');
+    composeForm.reset();
+    switchView('sent-view');
+    loadSent();
+  } catch (err) {
+    console.error(err);
+    showToast('حدث خطأ في الاتصال بالخادم.');
+  }
+});
+
+logoutBtn.addEventListener('click', () => {
+  currentUser = null;
+  currentMessages = [];
+  selectedMessageId = null;
+  setLoggedInState(false);
+  switchView('login-view');
+  showToast('تم تسجيل الخروج.');
+});
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -250,7 +208,6 @@ function formatDate(dateString) {
 }
 
 function renderMessages(container, folder, messages) {
-  if (!container) return;
   container.innerHTML = '';
   if (!messages || messages.length === 0) {
     const emptyDiv = document.createElement('div');
@@ -305,39 +262,40 @@ function renderMessages(container, folder, messages) {
 }
 
 async function loadInbox() {
-  if (!currentUser || !inboxList) return;
+  if (!currentUser) return;
   try {
     const res = await fetch(`${API_BASE}/messages/inbox?userId=${currentUser.id}`);
-    const data = await res.json().catch(() => []);
+    const data = await res.json();
     currentFolder = 'inbox';
     currentMessages = data;
     renderMessages(inboxList, 'inbox', data);
   } catch (err) {
+    console.error(err);
     showToast('تعذر تحميل صندوق الوارد.');
   }
 }
 
 async function loadSent() {
-  if (!currentUser || !sentList) return;
+  if (!currentUser) return;
   try {
     const res = await fetch(`${API_BASE}/messages/sent?userId=${currentUser.id}`);
-    const data = await res.json().catch(() => []);
+    const data = await res.json();
     currentFolder = 'sent';
     currentMessages = data;
     renderMessages(sentList, 'sent', data);
   } catch (err) {
+    console.error(err);
     showToast('تعذر تحميل الرسائل المرسلة.');
   }
 }
 
 function openMessageModal(msg, folder) {
-  if (!messageModal) return;
   selectedMessageId = msg.id;
-  if (modalSubject) modalSubject.textContent = msg.subject;
-  if (modalFrom) modalFrom.textContent = (msg.senderName || '') + ' <' + msg.senderEmail + '>';
-  if (modalTo) modalTo.textContent = msg.receiverEmail;
-  if (modalDate) modalDate.textContent = formatDate(msg.createdAt);
-  if (modalBody) modalBody.textContent = msg.body;
+  modalSubject.textContent = msg.subject;
+  modalFrom.textContent = `${msg.senderName || ''} <${msg.senderEmail}>`;
+  modalTo.textContent = msg.receiverEmail;
+  modalDate.textContent = formatDate(msg.createdAt);
+  modalBody.textContent = msg.body;
   messageModal.classList.remove('hidden');
   if (folder === 'inbox' && !msg.isRead) {
     markAsRead(msg.id);
@@ -345,22 +303,16 @@ function openMessageModal(msg, folder) {
 }
 
 function closeMessageModal() {
-  if (!messageModal) return;
   messageModal.classList.add('hidden');
   selectedMessageId = null;
 }
 
-if (modalClose) {
-  modalClose.addEventListener('click', closeMessageModal);
-}
-
-if (messageModal) {
-  messageModal.addEventListener('click', (e) => {
-    if (e.target === messageModal) {
-      closeMessageModal();
-    }
-  });
-}
+modalClose.addEventListener('click', closeMessageModal);
+messageModal.addEventListener('click', (e) => {
+  if (e.target === messageModal) {
+    closeMessageModal();
+  }
+});
 
 async function markAsRead(messageId) {
   if (!currentUser) return;
@@ -373,36 +325,79 @@ async function markAsRead(messageId) {
     if (currentFolder === 'inbox') {
       loadInbox();
     }
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-if (modalDelete) {
-  modalDelete.addEventListener('click', async () => {
-    if (!currentUser || !selectedMessageId) return;
-    const confirmed = window.confirm('هل أنت متأكد من حذف الرسالة؟');
-    if (!confirmed) return;
-    try {
-      const res = await fetch(`${API_BASE}/messages/${selectedMessageId}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUser.id })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        showToast(data.message || 'تعذر حذف الرسالة.');
-        return;
-      }
-      showToast('تم حذف الرسالة.');
-      closeMessageModal();
-      if (currentFolder === 'inbox') {
-        loadInbox();
-      } else {
-        loadSent();
-      }
-    } catch (err) {
-      showToast('حدث خطأ أثناء حذف الرسالة.');
+modalDelete.addEventListener('click', async () => {
+  if (!currentUser || !selectedMessageId) return;
+  if (!confirm('هل أنت متأكد من حذف الرسالة؟')) {
+    return;
+  }
+  try {
+    const res = await fetch(`${API_BASE}/messages/${selectedMessageId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: currentUser.id })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.message || 'تعذر حذف الرسالة.');
+      return;
     }
-  });
-}
+    showToast('تم حذف الرسالة.');
+    closeMessageModal();
+    if (currentFolder === 'inbox') {
+      loadInbox();
+    } else {
+      loadSent();
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('حدث خطأ أثناء حذف الرسالة.');
+  }
+});
 
 switchView('login-view');
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof particlesJS === 'undefined') return;
+
+  var config = {
+    particles: {
+      number: { value: 40, density: { enable: true, value_area: 600 } },
+      color: { value: "#22c55e" },
+      shape: { type: "circle" },
+      opacity: { value: 0.5 },
+      size: { value: 2.5, random: true },
+      line_linked: {
+        enable: true,
+        distance: 130,
+        color: "#22c55e",
+        opacity: 0.5,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1.3,
+        direction: "none",
+        random: false,
+        straight: false,
+        out_mode: "out"
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: false },
+        onclick: { enable: false },
+        resize: true
+      }
+    },
+    retina_detect: true
+  };
+
+  particlesJS("topbar-particles", config);
+  particlesJS("sidebar-particles", config);
+});
