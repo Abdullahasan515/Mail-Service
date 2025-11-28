@@ -1,4 +1,6 @@
-const API_BASE = 'https://mail-server-ts6e.onrender.com';
+const API_BASE = 'https://mail-server-ts6e.onrender.com/api';
+
+const API_BASE = 'http://localhost:3000/api';
 
 let currentUser = null;
 let currentView = 'login-view';
@@ -40,19 +42,21 @@ const modalDelete = document.getElementById('modal-delete');
 function showToast(message) {
   toast.textContent = message;
   toast.classList.remove('hidden');
-  setTimeout(() => {
+  setTimeout(function () {
     toast.classList.add('hidden');
   }, 2500);
 }
 
 function switchView(viewId) {
-  Object.values(views).forEach(v => v.classList.add('hidden'));
+  Object.values(views).forEach(function (v) {
+    v.classList.add('hidden');
+  });
   const view = views[viewId];
   if (view) {
     view.classList.remove('hidden');
     currentView = viewId;
   }
-  navButtons.forEach(btn => {
+  navButtons.forEach(function (btn) {
     btn.classList.toggle('active', btn.dataset.view === viewId);
   });
 }
@@ -75,8 +79,8 @@ function setLoggedInState(isLoggedIn) {
 
 setLoggedInState(false);
 
-navButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
+navButtons.forEach(function (btn) {
+  btn.addEventListener('click', function () {
     if (!currentUser && btn.dataset.view !== 'login-view') {
       showToast('الرجاء تسجيل الدخول أولاً.');
       switchView('login-view');
@@ -92,73 +96,87 @@ navButtons.forEach(btn => {
   });
 });
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
+tabs.forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    tabs.forEach(function (t) {
+      t.classList.remove('active');
+    });
     tab.classList.add('active');
     const tabId = tab.dataset.tab;
-    tabContents.forEach(c => c.classList.remove('active'));
+    tabContents.forEach(function (c) {
+      c.classList.remove('active');
+    });
     document.getElementById(tabId).classList.add('active');
   });
 });
 
-loginForm.addEventListener('submit', async (e) => {
+loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value.trim();
-  try {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+  fetch(API_BASE + '/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: password })
+  })
+    .then(function (res) {
+      if (!res.ok) {
+        return res.json().then(function (data) {
+          throw new Error(data.message || 'فشل تسجيل الدخول.');
+        });
+      }
+      return res.json();
+    })
+    .then(function (user) {
+      currentUser = user;
+      userEmailSpan.textContent = currentUser.email;
+      setLoggedInState(true);
+      showToast('تم تسجيل الدخول بنجاح ✅');
+      switchView('inbox-view');
+      loadInbox();
+    })
+    .catch(function () {
+      showToast('فشل تسجيل الدخول. تأكد من البيانات أو من اتصال الخادم.');
     });
-    if (!res.ok) {
-      const data = await res.json();
-      showToast(data.message || 'فشل تسجيل الدخول.');
-      return;
-    }
-    const user = await res.json();
-    currentUser = user;
-    userEmailSpan.textContent = currentUser.email;
-    setLoggedInState(true);
-    showToast('تم تسجيل الدخول بنجاح ✅');
-    switchView('inbox-view');
-    loadInbox();
-  } catch (err) {
-    console.error(err);
-    showToast('حدث خطأ في الاتصال بالخادم.');
-  }
 });
 
-registerForm.addEventListener('submit', async (e) => {
+registerForm.addEventListener('submit', function (e) {
   e.preventDefault();
   const name = document.getElementById('register-name').value.trim();
   const email = document.getElementById('register-email').value.trim();
   const password = document.getElementById('register-password').value.trim();
-  try {
-    const res = await fetch(`${API_BASE}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password })
+  fetch(API_BASE + '/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, email: email, password: password })
+  })
+    .then(function (res) {
+      return res.json().then(function (data) {
+        return { ok: res.ok, data: data };
+      });
+    })
+    .then(function (result) {
+      if (!result.ok) {
+        showToast(result.data.message || 'فشل إنشاء الحساب.');
+        return;
+      }
+      showToast('تم إنشاء الحساب بنجاح ✅ يمكنك الآن تسجيل الدخول.');
+      tabs.forEach(function (t) {
+        t.classList.remove('active');
+      });
+      document.querySelector('[data-tab="login-tab"]').classList.add('active');
+      tabContents.forEach(function (c) {
+        c.classList.remove('active');
+      });
+      document.getElementById('login-tab').classList.add('active');
+      document.getElementById('login-email').value = email;
+    })
+    .catch(function () {
+      showToast('حدث خطأ في الاتصال بالخادم.');
     });
-    const data = await res.json();
-    if (!res.ok) {
-      showToast(data.message || 'فشل إنشاء الحساب.');
-      return;
-    }
-    showToast('تم إنشاء الحساب بنجاح ✅ يمكنك الآن تسجيل الدخول.');
-    tabs.forEach(t => t.classList.remove('active'));
-    document.querySelector('[data-tab="login-tab"]').classList.add('active');
-    tabContents.forEach(c => c.classList.remove('active'));
-    document.getElementById('login-tab').classList.add('active');
-    document.getElementById('login-email').value = email;
-  } catch (err) {
-    console.error(err);
-    showToast('حدث خطأ في الاتصال بالخادم.');
-  }
 });
 
-composeForm.addEventListener('submit', async (e) => {
+composeForm.addEventListener('submit', function (e) {
   e.preventDefault();
   if (!currentUser) {
     showToast('الرجاء تسجيل الدخول أولاً.');
@@ -167,33 +185,37 @@ composeForm.addEventListener('submit', async (e) => {
   const to = document.getElementById('compose-to').value.trim();
   const subject = document.getElementById('compose-subject').value.trim();
   const body = document.getElementById('compose-body').value.trim();
-  try {
-    const res = await fetch(`${API_BASE}/messages`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        senderId: currentUser.id,
-        receiverEmail: to,
-        subject,
-        body
-      })
+  fetch(API_BASE + '/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      senderId: currentUser.id,
+      receiverEmail: to,
+      subject: subject,
+      body: body
+    })
+  })
+    .then(function (res) {
+      return res.json().then(function (data) {
+        return { ok: res.ok, data: data };
+      });
+    })
+    .then(function (result) {
+      if (!result.ok) {
+        showToast(result.data.message || 'تعذر إرسال الرسالة.');
+        return;
+      }
+      showToast('تم إرسال الرسالة ✉️');
+      composeForm.reset();
+      switchView('sent-view');
+      loadSent();
+    })
+    .catch(function () {
+      showToast('حدث خطأ في الاتصال بالخادم.');
     });
-    const data = await res.json();
-    if (!res.ok) {
-      showToast(data.message || 'تعذر إرسال الرسالة.');
-      return;
-    }
-    showToast('تم إرسال الرسالة ✉️');
-    composeForm.reset();
-    switchView('sent-view');
-    loadSent();
-  } catch (err) {
-    console.error(err);
-    showToast('حدث خطأ في الاتصال بالخادم.');
-  }
 });
 
-logoutBtn.addEventListener('click', () => {
+logoutBtn.addEventListener('click', function () {
   currentUser = null;
   currentMessages = [];
   selectedMessageId = null;
@@ -228,7 +250,7 @@ function renderMessages(container, folder, messages) {
   col4.textContent = 'الحالة';
   header.append(col1, col2, col3, col4);
   container.appendChild(header);
-  messages.forEach(msg => {
+  messages.forEach(function (msg) {
     const row = document.createElement('div');
     row.className = 'list-row';
     if (!msg.isRead && folder === 'inbox') {
@@ -254,45 +276,49 @@ function renderMessages(container, folder, messages) {
       status.textContent = 'مرسلة';
     }
     row.append(who, subjectSpan, dateSpan, status);
-    row.addEventListener('click', () => {
+    row.addEventListener('click', function () {
       openMessageModal(msg, folder);
     });
     container.appendChild(row);
   });
 }
 
-async function loadInbox() {
+function loadInbox() {
   if (!currentUser) return;
-  try {
-    const res = await fetch(`${API_BASE}/messages/inbox?userId=${currentUser.id}`);
-    const data = await res.json();
-    currentFolder = 'inbox';
-    currentMessages = data;
-    renderMessages(inboxList, 'inbox', data);
-  } catch (err) {
-    console.error(err);
-    showToast('تعذر تحميل صندوق الوارد.');
-  }
+  fetch(API_BASE + '/messages/inbox?userId=' + currentUser.id)
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      currentFolder = 'inbox';
+      currentMessages = data;
+      renderMessages(inboxList, 'inbox', data);
+    })
+    .catch(function () {
+      showToast('تعذر تحميل صندوق الوارد.');
+    });
 }
 
-async function loadSent() {
+function loadSent() {
   if (!currentUser) return;
-  try {
-    const res = await fetch(`${API_BASE}/messages/sent?userId=${currentUser.id}`);
-    const data = await res.json();
-    currentFolder = 'sent';
-    currentMessages = data;
-    renderMessages(sentList, 'sent', data);
-  } catch (err) {
-    console.error(err);
-    showToast('تعذر تحميل الرسائل المرسلة.');
-  }
+  fetch(API_BASE + '/messages/sent?userId=' + currentUser.id)
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      currentFolder = 'sent';
+      currentMessages = data;
+      renderMessages(sentList, 'sent', data);
+    })
+    .catch(function () {
+      showToast('تعذر تحميل الرسائل المرسلة.');
+    });
 }
 
 function openMessageModal(msg, folder) {
   selectedMessageId = msg.id;
   modalSubject.textContent = msg.subject;
-  modalFrom.textContent = `${msg.senderName || ''} <${msg.senderEmail}>`;
+  modalFrom.textContent = (msg.senderName || '') + ' <' + msg.senderEmail + '>';
   modalTo.textContent = msg.receiverEmail;
   modalDate.textContent = formatDate(msg.createdAt);
   modalBody.textContent = msg.body;
@@ -308,96 +334,57 @@ function closeMessageModal() {
 }
 
 modalClose.addEventListener('click', closeMessageModal);
-messageModal.addEventListener('click', (e) => {
+messageModal.addEventListener('click', function (e) {
   if (e.target === messageModal) {
     closeMessageModal();
   }
 });
 
-async function markAsRead(messageId) {
+function markAsRead(messageId) {
   if (!currentUser) return;
-  try {
-    await fetch(`${API_BASE}/messages/${messageId}/read`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: currentUser.id })
-    });
-    if (currentFolder === 'inbox') {
-      loadInbox();
-    }
-  } catch (err) {
-    console.error(err);
-  }
+  fetch(API_BASE + '/messages/' + messageId + '/read', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId: currentUser.id })
+  })
+    .then(function () {
+      if (currentFolder === 'inbox') {
+        loadInbox();
+      }
+    })
+    .catch(function () {});
 }
 
-modalDelete.addEventListener('click', async () => {
+modalDelete.addEventListener('click', function () {
   if (!currentUser || !selectedMessageId) return;
-  if (!confirm('هل أنت متأكد من حذف الرسالة؟')) {
-    return;
-  }
-  try {
-    const res = await fetch(`${API_BASE}/messages/${selectedMessageId}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: currentUser.id })
+  const ok = window.confirm('هل أنت متأكد من حذف الرسالة؟');
+  if (!ok) return;
+  fetch(API_BASE + '/messages/' + selectedMessageId, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId: currentUser.id })
+  })
+    .then(function (res) {
+      return res.json().then(function (data) {
+        return { ok: res.ok, data: data };
+      });
+    })
+    .then(function (result) {
+      if (!result.ok) {
+        showToast(result.data.message || 'تعذر حذف الرسالة.');
+        return;
+      }
+      showToast('تم حذف الرسالة.');
+      closeMessageModal();
+      if (currentFolder === 'inbox') {
+        loadInbox();
+      } else {
+        loadSent();
+      }
+    })
+    .catch(function () {
+      showToast('حدث خطأ أثناء حذف الرسالة.');
     });
-    const data = await res.json();
-    if (!res.ok) {
-      showToast(data.message || 'تعذر حذف الرسالة.');
-      return;
-    }
-    showToast('تم حذف الرسالة.');
-    closeMessageModal();
-    if (currentFolder === 'inbox') {
-      loadInbox();
-    } else {
-      loadSent();
-    }
-  } catch (err) {
-    console.error(err);
-    showToast('حدث خطأ أثناء حذف الرسالة.');
-  }
 });
 
 switchView('login-view');
-
-document.addEventListener('DOMContentLoaded', function () {
-  if (typeof particlesJS === 'undefined') return;
-
-  var config = {
-    particles: {
-      number: { value: 40, density: { enable: true, value_area: 600 } },
-      color: { value: "#22c55e" },
-      shape: { type: "circle" },
-      opacity: { value: 0.5 },
-      size: { value: 2.5, random: true },
-      line_linked: {
-        enable: true,
-        distance: 130,
-        color: "#22c55e",
-        opacity: 0.5,
-        width: 1
-      },
-      move: {
-        enable: true,
-        speed: 1.3,
-        direction: "none",
-        random: false,
-        straight: false,
-        out_mode: "out"
-      }
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: { enable: false },
-        onclick: { enable: false },
-        resize: true
-      }
-    },
-    retina_detect: true
-  };
-
-  particlesJS("topbar-particles", config);
-  particlesJS("sidebar-particles", config);
-});
