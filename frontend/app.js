@@ -1,6 +1,5 @@
 const API_BASE = 'https://mail-server-ts6e.onrender.com/api';
 
-const API_BASE = 'http://localhost:3000/api';
 
 let currentUser = null;
 let currentView = 'login-view';
