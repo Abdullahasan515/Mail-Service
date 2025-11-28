@@ -5,7 +5,10 @@
   <title>Saudi Cloud Mail | البريد السحابي السعودي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#016b3f" />
+
+  <!-- أيقونة الموقع (ضع هنا صورة الإيميل التي سترفعها) -->
   <link rel="icon" href="email-icon.png" type="image/png" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,11 +16,12 @@
     <header class="topbar">
       <div class="logo">
         <span class="logo-icon">
+          <!-- استبدل email-icon.png باسم ملف صورتك إن تغيّر -->
           <img src="email-icon.png" alt="شعار البريد" />
         </span>
         <div class="logo-text-group">
           <span class="logo-text-main">Saudi Cloud Mail</span>
-          <span class="logo-text-sub">بريد سحابي برؤية 2030</span>
+          <span class="logo-text-sub">بريد سحابي برؤية 2025</span>
         </div>
       </div>
       <div class="user-info" id="user-info">
@@ -40,11 +44,12 @@
       </aside>
 
       <section class="content">
+        <!-- شاشة تسجيل الدخول / التسجيل -->
         <div class="view" id="login-view">
           <div class="card auth-card">
             <h2>أهلاً بك في البريد السحابي السعودي</h2>
             <p class="subtitle">
-              سجّل الدخول أو أنشئ حساباً جديداً لاستخدام خدمة البريد السحابي المصغّرة المصمَّمة بروح رؤية السعودية 2030.
+              سجّل الدخول أو أنشئ حساباً جديداً لاستخدام خدمة البريد السحابي المصغّرة المصمَّمة بروح السعودية 2025.
             </p>
 
             <div class="tabs">
@@ -86,6 +91,7 @@
           </div>
         </div>
 
+        <!-- الوارد -->
         <div class="view hidden" id="inbox-view">
           <div class="view-header">
             <h2>صندوق الوارد</h2>
@@ -94,6 +100,7 @@
           <div id="inbox-list" class="list-card"></div>
         </div>
 
+        <!-- المرسلة -->
         <div class="view hidden" id="sent-view">
           <div class="view-header">
             <h2>الرسائل المرسلة</h2>
@@ -102,6 +109,7 @@
           <div id="sent-list" class="list-card"></div>
         </div>
 
+        <!-- إنشاء رسالة جديدة -->
         <div class="view hidden" id="compose-view">
           <div class="view-header">
             <h2>رسالة جديدة</h2>
@@ -126,6 +134,7 @@
           </div>
         </div>
 
+        <!-- نافذة عرض الرسالة -->
         <div class="modal hidden" id="message-modal">
           <div class="modal-content">
             <div class="modal-header">
@@ -146,6 +155,7 @@
           </div>
         </div>
 
+        <!-- الرسائل المنبثقة القصيرة -->
         <div id="toast" class="toast hidden"></div>
       </section>
     </main>
