@@ -37,7 +37,6 @@ body {
   z-index: 0;
 }
 
-/* الخلفية أغمق في يمين الصفحة حيث توجد البطاقة */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -54,7 +53,7 @@ body {
 .particles-layer {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -65,8 +64,8 @@ body {
   padding: 14px 28px;
   background: linear-gradient(
     to left,
-    rgba(4, 47, 46, 0.98),
-    rgba(5, 30, 20, 0.98)
+    rgba(4, 47, 46, 0.9),
+    rgba(5, 30, 20, 0.9)
   );
   border-bottom: 1px solid rgba(16, 185, 129, 0.45);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
@@ -74,6 +73,26 @@ body {
   top: 0;
   z-index: 10;
   overflow: hidden;
+}
+
+.sidebar {
+  background: linear-gradient(to bottom, rgba(2, 8, 23, 0.9), rgba(2, 19, 17, 0.9));
+  border-inline-end: 1px solid rgba(16, 185, 129, 0.35);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* هذه العناصر فوق طبقة الأنيميشن */
+.logo,
+.user-info,
+.brand,
+.nav {
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
@@ -128,17 +147,6 @@ body {
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: calc(100vh - 64px);
-}
-
-.sidebar {
-  background: linear-gradient(to bottom, #020817, #021311);
-  border-inline-end: 1px solid rgba(16, 185, 129, 0.35);
-  padding: 20px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
-  overflow: hidden;
 }
 
 .brand h2 {
@@ -548,4 +556,3 @@ textarea {
     display: none;
   }
 }
-
