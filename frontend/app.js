@@ -1,4 +1,3 @@
-
 const API_BASE = 'https://mail-server-ts6e.onrender.com';
 
 let currentUser = null;
@@ -361,3 +360,44 @@ modalDelete.addEventListener('click', async () => {
 });
 
 switchView('login-view');
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof particlesJS === 'undefined') return;
+
+  var config = {
+    particles: {
+      number: { value: 40, density: { enable: true, value_area: 600 } },
+      color: { value: "#22c55e" },
+      shape: { type: "circle" },
+      opacity: { value: 0.5 },
+      size: { value: 2.5, random: true },
+      line_linked: {
+        enable: true,
+        distance: 130,
+        color: "#22c55e",
+        opacity: 0.5,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1.3,
+        direction: "none",
+        random: false,
+        straight: false,
+        out_mode: "out"
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: false },
+        onclick: { enable: false },
+        resize: true
+      }
+    },
+    retina_detect: true
+  };
+
+  particlesJS("topbar-particles", config);
+  particlesJS("sidebar-particles", config);
+});
