@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini Cloud Mail Service</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="topbar">
+      <div class="logo">
+        <span class="logo-icon">☁️</span>
+        <span class="logo-text">Mini Cloud Mail</span>
+      </div>
+      <div class="user-info" id="user-info">
+        <span id="user-email"></span>
+        <button id="logout-btn" class="btn-secondary">تسجيل الخروج</button>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <h2>لوحة التحكّم</h2>
+        </div>
+        <nav class="nav">
+          <button class="nav-btn active" data-view="login-view" id="nav-login">تسجيل الدخول</button>
+          <button class="nav-btn" data-view="inbox-view" id="nav-inbox">الوارد</button>
+          <button class="nav-btn" data-view="sent-view" id="nav-sent">المرسلة</button>
+          <button class="nav-btn" data-view="compose-view" id="nav-compose">رسالة جديدة</button>
+        </nav>
+      </aside>
+
+      <section class="content">
+        <div class="view" id="login-view">
+          <div class="card auth-card">
+            <h2>مرحبا 👋</h2>
+            <p class="subtitle">سجّل الدخول أو أنشئ حساباً جديداً لاستخدام خدمة البريد السحابية المصغّرة.</p>
+
+            <div class="tabs">
+              <button class="tab-btn active" data-tab="login-tab">تسجيل الدخول</button>
+              <button class="tab-btn" data-tab="register-tab">إنشاء حساب</button>
+            </div>
+
+            <div class="tab-content active" id="login-tab">
+              <form id="login-form">
+                <div class="form-group">
+                  <label for="login-email">البريد الإلكتروني</label>
+                  <input type="email" id="login-email" required />
+                </div>
+                <div class="form-group">
+                  <label for="login-password">كلمة المرور</label>
+                  <input type="password" id="login-password" required />
+                </div>
+                <button type="submit" class="btn-primary full-width">تسجيل الدخول</button>
+              </form>
+            </div>
+
+            <div class="tab-content" id="register-tab">
+              <form id="register-form">
+                <div class="form-group">
+                  <label for="register-name">الاسم الكامل</label>
+                  <input type="text" id="register-name" required />
+                </div>
+                <div class="form-group">
+                  <label for="register-email">البريد الإلكتروني الجامعي</label>
+                  <input type="email" id="register-email" required />
+                </div>
+                <div class="form-group">
+                  <label for="register-password">كلمة المرور</label>
+                  <input type="password" id="register-password" required />
+                </div>
+                <button type="submit" class="btn-primary full-width">إنشاء حساب</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="view hidden" id="inbox-view">
+          <div class="view-header">
+            <h2>صندوق الوارد</h2>
+            <p class="subtitle">عرض جميع الرسائل المستلمة.</p>
+          </div>
+          <div id="inbox-list" class="list-card"></div>
+        </div>
+
+        <div class="view hidden" id="sent-view">
+          <div class="view-header">
+            <h2>الرسائل المرسلة</h2>
+            <p class="subtitle">عرض جميع الرسائل التي قمت بإرسالها.</p>
+          </div>
+          <div id="sent-list" class="list-card"></div>
+        </div>
+
+        <div class="view hidden" id="compose-view">
+          <div class="view-header">
+            <h2>رسالة جديدة</h2>
+            <p class="subtitle">أرسل رسالة إلى مستخدم آخر داخل النظام.</p>
+          </div>
+          <div class="card">
+            <form id="compose-form">
+              <div class="form-group">
+                <label for="compose-to">إلى (البريد الإلكتروني للمستلم)</label>
+                <input type="email" id="compose-to" required />
+              </div>
+              <div class="form-group">
+                <label for="compose-subject">الموضوع</label>
+                <input type="text" id="compose-subject" required />
+              </div>
+              <div class="form-group">
+                <label for="compose-body">نص الرسالة</label>
+                <textarea id="compose-body" rows="6" required></textarea>
+              </div>
+              <button type="submit" class="btn-primary">إرسال الرسالة</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="modal hidden" id="message-modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 id="modal-subject"></h3>
+              <button id="modal-close" class="icon-btn">✕</button>
+            </div>
+            <div class="modal-meta">
+              <p><strong>من:</strong> <span id="modal-from"></span></p>
+              <p><strong>إلى:</strong> <span id="modal-to"></span></p>
+              <p><strong>التاريخ:</strong> <span id="modal-date"></span></p>
+            </div>
+            <div class="modal-body">
+              <p id="modal-body"></p>
+            </div>
+            <div class="modal-actions">
+              <button id="modal-delete" class="btn-secondary">حذف الرسالة</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="toast" class="toast hidden"></div>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

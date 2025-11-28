@@ -1,0 +1,14 @@
+{
+  "name": "mini-cloud-mail-backend",
+  "version": "1.0.0",
+  "description": "Simple mini cloud mail service backend (Node.js + Express)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.0",
+    "nodemon": "^3.1.0"
+  }
+}
