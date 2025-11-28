@@ -1,9 +1,8 @@
 :root {
-  /* ألوان سعودية 2025 */
   --bg: #020917;
   --bg-soft: #022c22;
   --bg-card: rgba(3, 18, 10, 0.96);
-  --accent: #22c55e;         /* أخضر رئيسي */
+  --accent: #22c55e;
   --accent-soft: rgba(34, 197, 94, 0.16);
   --accent-strong: #16a34a;
   --text-main: #ecfdf5;
@@ -24,19 +23,32 @@ body {
   min-height: 100vh;
   color: var(--text-main);
   background-color: #020617;
-  background-image: url("1607519359Flag-of-Saudi-Arabia-3.svg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  background-attachment: fixed;
+}
+
+.flag-bg {
+  position: fixed;
+  inset: 0;
+  background: url("1607519359Flag-of-Saudi-Arabia-3.svg") center/contain no-repeat;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: rgba(2, 6, 23, 0.7);
+  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.85));
   backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 1;
+}
+
+.particles-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .topbar {
@@ -54,6 +66,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
+  overflow: hidden;
 }
 
 .logo {
@@ -62,7 +75,6 @@ body {
   gap: 12px;
 }
 
-/* أيقونة الإيميل */
 .logo-icon {
   width: 36px;
   height: 36px;
@@ -105,15 +117,11 @@ body {
   color: var(--text-muted);
 }
 
-/* ======= تخطيط الصفحة الرئيسية ======= */
-
 .main-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: calc(100vh - 64px);
 }
-
-/* الشريط الجانبي */
 
 .sidebar {
   background: linear-gradient(to bottom, #020817, #021311);
@@ -122,6 +130,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  position: relative;
+  overflow: hidden;
 }
 
 .brand h2 {
@@ -163,8 +173,6 @@ body {
   font-weight: 600;
 }
 
-/* ======= المحتوى ======= */
-
 .content {
   padding: 24px 26px;
 }
@@ -178,8 +186,6 @@ body {
   font-size: 14px;
   color: var(--text-muted);
 }
-
-/* البطاقات */
 
 .card {
   background: linear-gradient(
@@ -195,11 +201,10 @@ body {
 
 .auth-card {
   max-width: 520px;
-  margin: 0 auto;
   margin-top: 32px;
+  margin-left: auto;
+  margin-right: 40px;
 }
-
-/* التبويبات */
 
 .tabs {
   display: flex;
@@ -236,8 +241,6 @@ body {
 .tab-content.active {
   display: block;
 }
-
-/* الحقول */
 
 .form-group {
   margin-bottom: 14px;
@@ -282,8 +285,6 @@ textarea {
   resize: vertical;
 }
 
-/* الأزرار */
-
 .btn-primary,
 .btn-secondary {
   border-radius: 999px;
@@ -325,8 +326,6 @@ textarea {
   width: 100%;
   margin-top: 4px;
 }
-
-/* القوائم */
 
 .list-card {
   margin-top: 10px;
@@ -399,8 +398,6 @@ textarea {
   font-size: 12px;
   color: var(--text-muted);
 }
-
-/* النافذة المنبثقة */
 
 .modal {
   position: fixed;
@@ -475,8 +472,6 @@ textarea {
   justify-content: flex-end;
 }
 
-/* التوست */
-
 .toast {
   position: fixed;
   bottom: 20px;
@@ -496,8 +491,6 @@ textarea {
   display: none;
 }
 
-/* ======= استجابة الشاشات الصغيرة ======= */
-
 @media (max-width: 900px) {
   .main-layout {
     grid-template-columns: 1fr;
@@ -516,6 +509,10 @@ textarea {
   .nav {
     flex-direction: row;
   }
+
+  .auth-card {
+    margin-right: 16px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -530,6 +527,8 @@ textarea {
   .auth-card {
     margin-top: 18px;
     padding-inline: 16px;
+    margin-right: 0;
+    margin-left: 0;
   }
 
   .list-header,
