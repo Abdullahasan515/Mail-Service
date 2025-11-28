@@ -1,18 +1,24 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>Mini Cloud Mail Service</title>
+  <title>Saudi Cloud Mail | البريد السحابي السعودي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#016b3f" />
+  <link rel="icon" href="email-icon.png" type="image/png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app-container">
     <header class="topbar">
       <div class="logo">
-        <span class="logo-icon">☁️</span>
-        <span class="logo-text">Mini Cloud Mail</span>
+        <span class="logo-icon">
+          <img src="email-icon.png" alt="شعار البريد" />
+        </span>
+        <div class="logo-text-group">
+          <span class="logo-text-main">Saudi Cloud Mail</span>
+          <span class="logo-text-sub">بريد سحابي برؤية 2025</span>
+        </div>
       </div>
       <div class="user-info" id="user-info">
         <span id="user-email"></span>
@@ -36,8 +42,10 @@
       <section class="content">
         <div class="view" id="login-view">
           <div class="card auth-card">
-            <h2>مرحبا 👋</h2>
-            <p class="subtitle">سجّل الدخول أو أنشئ حساباً جديداً لاستخدام خدمة البريد السحابية المصغّرة.</p>
+            <h2>أهلاً بك في البريد السحابي السعودي</h2>
+            <p class="subtitle">
+              سجّل الدخول أو أنشئ حساباً جديداً لاستخدام خدمة البريد السحابي المصغّرة المصمَّمة بروح السعودية 2025.
+            </p>
 
             <div class="tabs">
               <button class="tab-btn active" data-tab="login-tab">تسجيل الدخول</button>
@@ -142,6 +150,7 @@
       </section>
     </main>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
