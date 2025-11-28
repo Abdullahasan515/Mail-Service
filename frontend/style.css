@@ -479,3 +479,40 @@ textarea {
 
   .sidebar {
     flex-direction: row;
+    overflow-x: auto;
+    padding-block: 12px;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    padding-inline: 14px;
+  }
+
+  .content {
+    padding-inline: 14px;
+  }
+
+  .auth-card {
+    margin-top: 18px;
+    padding-inline: 16px;
+  }
+
+  .list-header,
+  .list-row {
+    grid-template-columns: 2fr 3fr 1.2fr;
+  }
+
+  .list-header span:nth-child(4),
+  .list-row span:nth-child(4) {
+    display: none;
+  }
+}
