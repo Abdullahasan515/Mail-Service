@@ -25,21 +25,29 @@ body {
   background-color: #020617;
 }
 
+/* العلم في يسار الشاشة فقط */
 .flag-bg {
   position: fixed;
-  inset: 0;
-  background: url("1607519359Flag-of-Saudi-Arabia-3.svg") center/contain no-repeat;
-  opacity: 0.6;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45vw;
+  background: url("1607519359Flag-of-Saudi-Arabia-3.svg") left center/contain no-repeat;
+  opacity: 0.9;
   pointer-events: none;
   z-index: 0;
 }
 
+/* الخلفية أغمق في يمين الصفحة حيث توجد البطاقة */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.7), rgba(2, 6, 23, 0.85));
-  backdrop-filter: blur(10px);
+  background:
+    linear-gradient(to right,
+      rgba(2, 6, 23, 0.2) 0%,
+      rgba(2, 6, 23, 0.65) 40%,
+      rgba(2, 6, 23, 0.9) 100%);
   position: relative;
   z-index: 1;
 }
@@ -199,11 +207,12 @@ body {
   box-shadow: var(--shadow-soft);
 }
 
+/* محاذاة البطاقة إلى اليمين */
 .auth-card {
   max-width: 520px;
   margin-top: 32px;
   margin-left: auto;
-  margin-right: 40px;
+  margin-right: max(4vw, 40px);
 }
 
 .tabs {
