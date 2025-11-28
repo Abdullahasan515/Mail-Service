@@ -5,18 +5,17 @@
   <title>Saudi Cloud Mail | البريد السحابي السعودي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#016b3f" />
-
-  <!-- أيقونة الموقع (ضع هنا صورة الإيميل التي سترفعها) -->
   <link rel="icon" href="email-icon.png" type="image/png" />
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="flag-bg"></div>
+
   <div class="app-container">
     <header class="topbar">
+      <div id="topbar-particles" class="particles-layer"></div>
       <div class="logo">
         <span class="logo-icon">
-          <!-- استبدل email-icon.png باسم ملف صورتك إن تغيّر -->
           <img src="email-icon.png" alt="شعار البريد" />
         </span>
         <div class="logo-text-group">
@@ -32,6 +31,7 @@
 
     <main class="main-layout">
       <aside class="sidebar">
+        <div id="sidebar-particles" class="particles-layer"></div>
         <div class="brand">
           <h2>لوحة التحكّم</h2>
         </div>
@@ -44,7 +44,6 @@
       </aside>
 
       <section class="content">
-        <!-- شاشة تسجيل الدخول / التسجيل -->
         <div class="view" id="login-view">
           <div class="card auth-card">
             <h2>أهلاً بك في البريد السحابي السعودي</h2>
@@ -91,7 +90,6 @@
           </div>
         </div>
 
-        <!-- الوارد -->
         <div class="view hidden" id="inbox-view">
           <div class="view-header">
             <h2>صندوق الوارد</h2>
@@ -100,7 +98,6 @@
           <div id="inbox-list" class="list-card"></div>
         </div>
 
-        <!-- المرسلة -->
         <div class="view hidden" id="sent-view">
           <div class="view-header">
             <h2>الرسائل المرسلة</h2>
@@ -109,7 +106,6 @@
           <div id="sent-list" class="list-card"></div>
         </div>
 
-        <!-- إنشاء رسالة جديدة -->
         <div class="view hidden" id="compose-view">
           <div class="view-header">
             <h2>رسالة جديدة</h2>
@@ -134,7 +130,6 @@
           </div>
         </div>
 
-        <!-- نافذة عرض الرسالة -->
         <div class="modal hidden" id="message-modal">
           <div class="modal-content">
             <div class="modal-header">
@@ -155,12 +150,12 @@
           </div>
         </div>
 
-        <!-- الرسائل المنبثقة القصيرة -->
         <div id="toast" class="toast hidden"></div>
       </section>
     </main>
   </div>
 
+  <script src="particles.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
